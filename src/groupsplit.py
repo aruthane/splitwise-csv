@@ -229,15 +229,16 @@ class SplitGenerator():
         **change csvDateFormat to the format in your csv if necessary** 
         Further reading on date formats: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
         """
-        csvDateFormat="%m/%d/%Y"
+        csvDateFormat="%d/%m/%Y"
         self.transactions = []
         for r in self.rows:
             # if not self.options.try_all and do_hash(str(r)) == self.csv.newest_transaction:
             #    break
-            if float(r[int(self.csv.amount_col)]) > 0:
+            amount = -float(r[int(self.csv.amount_col)])
+            if amount > 0:
                 self.transactions.append({
                     "date": datetime.strptime(r[int(self.csv.date_col)], csvDateFormat).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "amount": Money(r[int(self.csv.amount_col)], self.csv.local_currency),
+                    "amount": Money(str(amount), self.csv.local_currency),
                     "desc": re.sub(r'\s+', ' ', r[int(self.csv.desc_col)])
                 }
                 )
