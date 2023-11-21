@@ -216,6 +216,9 @@ class SplitGenerator():
         if self.csv.has_title_row:
             self.rows = self.rows[1:]
 
+        if self.options.reverse:
+            self.rows.reverse()
+
         self.make_transactions()
         self.csv.record_newest_transaction(self.rows)
         self.get_group(group_name)
@@ -232,8 +235,10 @@ class SplitGenerator():
         csvDateFormat="%d/%m/%Y"
         self.transactions = []
         for r in self.rows:
-            # if not self.options.try_all and do_hash(str(r)) == self.csv.newest_transaction:
-            #    break
+            print(str(r))
+            print(do_hash(str(r)))
+            if do_hash(str(r)) == self.csv.newest_transaction:
+               return
             amount = -float(r[int(self.csv.amount_col)])
             if amount > 0:
                 self.transactions.append({
@@ -330,6 +335,7 @@ def main():
     parser.add_option('', '--csv-settings', default='csv_settings.pkl', dest='csv_settings', help='supply different csv_settings object (for testing mostly)')
     parser.add_option('', '--api-client', default='oauth_client.pkl', dest='api_client', help='supply different splitwise api client (for testing mostly)')
     parser.add_option('-a', '--all', default=False, action='store_true', dest='try_all', help='consider all transactions in csv file no matter whether they were already seen')
+    parser.add_option('-r', '--reverse', default=False, action='store_true', dest='reverse', help='read through CSV in reverse')
     options, args = parser.parse_args()
     logger.setLevel(log_levels[options.verbosity])
     splitwise = Splitwise(options.api_client)
