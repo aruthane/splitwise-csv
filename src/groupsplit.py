@@ -283,7 +283,8 @@ class SplitGenerator():
         print("Found {0} transactions".format(len(self.transactions)))
         i = 0
         for t in self.transactions:
-            if self.options.yes or input("%d: %s at %s $%s. Split? [y/N]" % (i, t['date'], t['desc'], t['amount'])).lower() == 'y':
+            i = i + 1
+            if self.options.yes or input("%d of %d: %s at %s $%s. Split? [y/N]" % (i, len(self.transactions), t['date'], t['desc'], t['amount'])).lower() == 'y':
                 self.splits.append(t)
 
         print("-" * 40)
