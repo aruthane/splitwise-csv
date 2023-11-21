@@ -235,8 +235,6 @@ class SplitGenerator():
         csvDateFormat="%d/%m/%Y"
         self.transactions = []
         for r in self.rows:
-            print(str(r))
-            print(do_hash(str(r)))
             if do_hash(str(r)) == self.csv.newest_transaction:
                return
             amount = -float(r[int(self.csv.amount_col)])
