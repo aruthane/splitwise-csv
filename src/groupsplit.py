@@ -234,9 +234,12 @@ class SplitGenerator():
         """
         csvDateFormat="%d/%m/%Y"
         self.transactions = []
-        for r in self.rows:
+        for i, r in enumerate(self.rows):
             if do_hash(str(r)) == self.csv.newest_transaction:
                return
+            if len(r) == 0:
+                print("Row %d is empty" % i)
+                continue
             amount = -float(r[int(self.csv.amount_col)])
             if amount > 0:
                 self.transactions.append({
